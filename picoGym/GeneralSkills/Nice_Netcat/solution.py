@@ -11,10 +11,7 @@ def main():
         data = s.recv(1024)
 
     chars = data.split()
-    FLAG = ""
-    for c in chars:
-        FLAG += chr(int(c))
-    print(FLAG)
+    print(''.join((chr(int(c))) for c in chars))
 
 if __name__ == '__main__':
     main()
