@@ -7,6 +7,7 @@ def main():
     print("Getting the file")
     URL = 'https://mercury.picoctf.net/static/a5683698ac318b47bd060cb786859f23/flag'
     response = requests.get(URL)
+    open("flag", "wb").write(response.content)
 
     # Print the file content
     print("The flag is:")
