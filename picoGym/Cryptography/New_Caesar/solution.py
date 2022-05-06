@@ -27,7 +27,7 @@ def main():
             char = enc[i] + enc[i+1]
             flag += b16_decode(char, key)
         print(f"key:{key}  :  {flag}")
-        print()
+        pri
 
 
 if __name__ == '__main__':
