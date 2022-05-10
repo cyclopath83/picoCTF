@@ -1,11 +1,5 @@
 #!/usr/bin/env python
 
-
-#
-# NOT WORKING YET!!!
-#
-
-
 import math
 
 # INPUT
