@@ -8,47 +8,96 @@
 
 import math
 
-CIPHER = "Ta _7N6DDDhlg:W3D_H3C31N__0D3ef sHR053F38N43D0F i33___NAxx".replace(" ","")
+# INPUT
+CIPHER = "Ta _7N6DDDhlg:W3D_H3C31N__0D3ef sHR053F38N43D0F i33___NA"
 N = 4
 
-def main():
-    # Do all the math
-    global CIPHER
-    PLAIN = " "*len(CIPHER)
-    L = len(CIPHER)
-    K = math.ceil(L / (2* (N - 1)))
-    x = 0
-    y = 0
-    if ( L % (2 * (N-1)) != 0):
-        while L > (N + (N-1)*x):
-            x += 1
-        y = N + (N-1)*x - L
-    CIPHER += "x"*y
-    print(CIPHER)
-    print(f"L={L}  -  K={K}  -  x={x}  -  y={y}")
-    print()
 
-    # Print all the lines
-    i = 0
-    for row in range(0, N):
+# Global Vars
+L = 0
+K = 0
+x = 0
+y = 0
+
+
+
+def printGrid(grid):
+    for i in range(N):
         line = ""
-        for j in range(0, K-1):
-            line += ("  " * row)
-            line += CIPHER[i] + " "
-            PLAIN = PLAIN[0:j*K+row] + CIPHER[i] + PLAIN[j*K+row+1:]
-            i += 1
-            line += ("  " * (2 * (N - 1) - 1 - 2 * row) )
-            if (row != 0) and (row != N-1 ):
-                line += CIPHER[i] + " "
-                PLAIN = PLAIN[0:j*K+row] + CIPHER[i] + PLAIN[j*K+row+1:]
-                i += 1
-            if row > 1:
-                line += "  " * (row - 1)
-            
+        for j in range(len(grid[i])):
+            line += grid[i][j]
         print(line)
-
     print()
-    print(PLAIN)
+
+def emptyGrid():
+    global L, K, x, y
+
+    # Do some math
+    L = len(CIPHER)
+    K = math.ceil(L / (2*(N-1)))
+    
+    # Create the empty grid
+    grid = [[" " for i in range(L)] for j in range(N)]
+
+    # Fill in '*' where a char should be.
+    i = 0
+    j = 0
+    dir = 1
+    for c in range(L):
+        grid[i][j] = '*'
+        j += 1
+        if (i == 0) and (dir == -1):
+            dir = 1
+        if (i == N-1) and (dir == 1):
+            dir = -1
+        i += dir
+
+    printGrid(grid)
+    return grid 
+
+def fillGrid(grid):
+    c = 0
+    for i in range(N):
+        for j in range(L):
+            if(grid[i][j] == '*'):
+                grid[i][j] = CIPHER[c]
+                c += 1
+    printGrid(grid)
+    return grid
+
+def extractPlain(grid):
+    i = 0
+    j = 0
+    dir = 1
+    plain = ""
+    for c in range(L):
+        plain += grid[i][j]
+        j += 1
+        if (i == 0) and (dir == -1):
+            dir = 1
+        if (i == N-1) and (dir == 1):
+            dir = -1
+        i += dir
+    print(plain)
+    print()
+    return plain
+
+def main():
+    # Create an empty grid with the correct dimensions
+    grid = emptyGrid()
+
+    # Fill each character of the cipher-text, on all the '*' starting with the first row, 2nd row, ... left to right.
+    grid = fillGrid(grid)
+
+    # Now let's extract the plaintext from the grid
+    plain = extractPlain(grid)
+
+    # Extract the picoCTF flag from the plaintext
+    flag = "picoCTF{" + plain.split()[-1] + "}"
+    print(flag)
+    
+
+
 
 
 
